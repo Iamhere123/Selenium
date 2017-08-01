@@ -1,0 +1,68 @@
+Selenium
+
+public class dads {
+
+
+
+
+@Test
+public void extractWebTables() throws IOException{
+
+    SXSSFWorkbook workbook = new SXSSFWorkbook(100);
+    SXSSFSheet sheet = workbook.createSheet("output");
+     FileOutputStream f = new FileOutputStream("GAHzxvv123TESTvvvzxzzadage12.xlsx",true);
+
+  // DRIVER
+    WebDriver driver=new FirefoxDriver();
+    driver.get("https://en.wikipedia.org/wiki/List_of_Death_Note_episodes");
+    WebElement Table= driver.findElement(By.xpath("//tbody"));
+
+
+
+
+    List<WebElement> rows=Table.findElements(By.tagName("td"));
+
+    Iterator<WebElement> i=rows.iterator();
+    int x=1;
+    while(i.hasNext())
+    {   
+        WebElement row=i.next();
+        List<WebElement> columns=row.findElements(By.tagName("i"));
+        Iterator<WebElement> j=columns.iterator();
+        int y=1;
+        while(j.hasNext())
+        {
+            WebElement column=j.next();
+            System.out.println(column.getText());
+
+            SXSSFRow dataRow = sheet.createRow((short)x);
+
+            SXSSFCell cell=dataRow.createCell(y);
+            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+            cell.setCellValue(column.getText());
+
+
+            y=y+1;
+
+
+        }
+        x=x+1;
+    }
+
+
+
+
+    try {
+        f.flush();
+        workbook.write(f);
+        f.close();
+        System.out.println("Excel written successfully..");
+        driver.close();
+
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+}
